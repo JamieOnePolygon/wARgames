@@ -18,6 +18,8 @@ public class GridGenerator : MonoBehaviour
     
     public void GenerateGrid()
     {
+        GridCell[,] theGrid = new GridCell[GridSize, GridSize];
+
         // Generating the Grid
         for(int yIndex = 0; yIndex < GridSize; yIndex++)
         {
@@ -39,9 +41,13 @@ public class GridGenerator : MonoBehaviour
 
                 // Setting it's name for sanity's sake.
                 GridCell cell = go.GetComponent<GridCell>();
-                cell.Initialize(new Vector2(xIndex, yIndex), IntToString(xIndex) + ", " + yIndex);
+                cell.Initialize(new Vector2Int(xIndex, yIndex), IntToString(xIndex) + ", " + yIndex);
+
+                theGrid[xIndex, yIndex] = cell;
             }
         }
+
+        GetComponent<GridManager>().InitializeGrid(theGrid);
 
         Destroy(this);
     }
