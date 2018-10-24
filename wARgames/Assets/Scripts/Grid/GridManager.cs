@@ -57,60 +57,6 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public bool IsValidLocation(Vector2Int origin, GamePiece piece)
-    {
-        bool isValid = false;
-
-        switch(piece.m_Orientation)
-        {
-            case GamePiece.Orientation.North:
-
-                for(int index = 0; index < piece.PieceLength; index++)
-                {
-                    if(GridCells[origin.x, origin.y + index].ContainsGamePiece)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-
-            case GamePiece.Orientation.East:
-
-                for (int index = 0; index < piece.PieceLength; index++)
-                {
-                    if (GridCells[origin.x - index, origin.y].ContainsGamePiece)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-
-            case GamePiece.Orientation.South:
-
-                for (int index = 0; index < piece.PieceLength; index++)
-                {
-                    if (GridCells[origin.x, origin.y - index].ContainsGamePiece)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-
-            case GamePiece.Orientation.West:
-
-                for (int index = 0; index < piece.PieceLength; index++)
-                {
-                    if (GridCells[origin.x + index, origin.y].ContainsGamePiece)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-        }
-
-        return isValid;
-    }
-
     #region
     private void PlaceNorth(Vector2Int origin, int length)
     { 
@@ -153,75 +99,118 @@ public class GridManager : MonoBehaviour
     }
     #endregion
 
-    /// <summary>
-    /// Checks to see if a GamePiece rotated to a new orientation will fit on the game grid.
-    /// </summary>
-    /// <param name="origin"> Origin of the GamePiece located on the Grid. </param>
-    /// <param name="newOrientation"> Orientation which we want to test. </param>
-    /// <param name="size"> Length of the GamePiece trying to fit on the Grid. </param>
-    /// <returns> Returns a boolean on whether the GamePiece in the new orientation will fit on the board. </returns>
-    public bool CanRotate(Vector2Int origin, GamePiece.Orientation newOrientation, int size)
+    public bool ValidationLocationRotation(Vector2Int origin, GamePiece piece)
     {
-        bool canRotate = true;
+        bool isValid = true;
 
-        switch(newOrientation)
+        // Looking over all of the possible Orientations and performing checks to see if they are valid.
+        switch(piece.m_Orientation)
         {
+
+            // Checking to see if the piece will hang over the bottom edge of the board, and checking to
+            // see if it will overlap any other pieces.
             case GamePiece.Orientation.North:
 
-                if (origin.y + size >= GridCells.GetLength(1) - 1)
+                // Checking to see if a piece will over hang.
+                if (origin.y + piece.PieceLength > GridCells.GetLength(0))
                 {
-                    Debug.Log("North NOT Valid");
-                    canRotate = false;
-                }
-                else
-                {
-                    Debug.Log("North IS valid");
-                    canRotate = true;
+                    Debug.Log("Piece too long to fit North");
+
+                    return false;
                 }
 
-                break;
+                // Checking to see if each cell under the piece has an already existing piece there.
+                for(int index = 0; index < piece.PieceLength; index++)
+                {
+                    if (GridCells[origin.x, origin.y + index].ContainsGamePiece)
+                    {
+                        Debug.Log("Piece overlaps anorther");
 
+                        return false;
+                    }
+                }
+
+                return true;
+
+            // Checking to see if the piece will hang over the left edge of the board, and checking to
+            // see if it will overlap any other pieces.
             case GamePiece.Orientation.East:
 
-                if(origin.x - size < 0)
+                // Checking to see if a piece will over hang.
+                if (origin.x - piece.PieceLength + 1 < 0)
                 {
-                    canRotate = false;
-                }
-                else
-                {
-                    canRotate = true;
+                    Debug.Log("Piece too long to fit East");
+
+
+                    return false;
                 }
 
-                break;
+                // Checking to see if each cell under the piece has an already existing piece there.
+                for (int index = 0; index < piece.PieceLength; index++)
+                {
+                    if (GridCells[origin.x - index, origin.y].ContainsGamePiece)
+                    {
+                        Debug.Log("Piece overlaps anorther");
 
+                        return false;
+                    }
+                }
+
+                return true;
+
+            // Checking to see if the piece will hang over the top edge of the board, and checking to
+            // see if it will overlap any other pieces.
             case GamePiece.Orientation.South:
 
-                if (origin.y - size < 0)
+                // Checking to see if a piece will over hang.
+                if (origin.y - piece.PieceLength + 1 < 0)
                 {
-                    canRotate = false;
-                }
-                else
-                {
-                    canRotate = true;
+                    Debug.Log("Piece too long to fit South");
+
+
+                    return false;
                 }
 
-                break;
+                // Checking to see if each cell under the piece has an already existing piece there.
+                for (int index = 0; index < piece.PieceLength; index++)
+                {
+                    if (GridCells[origin.x, origin.y - index].ContainsGamePiece)
+                    {
+                        Debug.Log("Piece overlaps anorther");
 
+                        return false;
+                    }
+                }
+
+                return true;
+
+            // Checking to see if the piece will hang over the left edge of the board, and checking to
+            // see if it will overlap any other pieces.
             case GamePiece.Orientation.West:
 
-                if (origin.x + size >= GridCells.GetLength(0) - 1)
+                // Checking to see if a piece will over hang.
+                if (origin.x + piece.PieceLength > GridCells.GetLength(1))
                 {
-                    canRotate = false;
-                }
-                else
-                {
-                    canRotate = true;
+                    Debug.Log("Piece too long to fit West");
+
+                    return false;
                 }
 
-                break;
+                // Checking to see if each cell under the piece has an already existing piece there.
+                for (int index = 0; index < piece.PieceLength; index++)
+                {
+                    if (GridCells[origin.x + index, origin.y].ContainsGamePiece)
+                    {
+                        Debug.Log("Piece overlaps anorther");
+
+                        return false;
+                    }
+                }
+
+                return true;
         }
 
-        return canRotate;
+        return isValid;
     }
 
     public GridCell GetCell(Vector2Int position)

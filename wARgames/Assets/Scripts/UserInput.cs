@@ -48,4 +48,9 @@ public class UserInput : MonoBehaviour
             SelectedGameObject.RotatePiece();
         }
     }
+
+    public void PlaceSelectedPiece()
+    {
+        FindObjectOfType<GridManager>().PlacePiece(SelectedGameObject.Origin, SelectedGameObject);
+    }
 }

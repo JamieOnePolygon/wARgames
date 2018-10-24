@@ -5,12 +5,11 @@ using UnityEngine;
 public class GamePiece : MonoBehaviour
 {
     public int PieceLength = 2;
-    public Vector2Int WhereToGo;
 
     public enum Orientation { North, East, South, West};
     public Orientation m_Orientation = Orientation.North;
 
-    private Vector2Int Origin;
+    public Vector2Int Origin { get; private set; }
     private int remainingHitPoints;
 
     GridManager GridManager;
@@ -35,21 +34,33 @@ public class GamePiece : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 90f * (int)m_Orientation, 0f);
     }
 
-    private void FindNextAvailableRotation()
+    private bool FindNextAvailableRotation()
     {
-        bool canRotate = false;
+        bool canPlace = false;
+        int iteration = 0;
 
-        while (canRotate == false)
+        while (canPlace == false || iteration < 4)
         {
             m_Orientation++;
 
-            canRotate = (GridManager.CanRotate(Origin, m_Orientation, PieceLength) && GridManager.IsValidLocation(Origin, this));
-
-            if ((int)m_Orientation >= 4)
+            if ((int)m_Orientation > 3)
             {
-                m_Orientation = 0;
+                m_Orientation = Orientation.North;
             }
+
+            Debug.LogFormat("Attempting Orientation: {0}", m_Orientation.ToString());
+
+            canPlace = GridManager.ValidationLocationRotation(Origin, this);
+
+            if (canPlace == true)
+            {
+                break;
+            }
+
+            iteration++;
         }
+
+        return canPlace;
     }
 
     public void TakeDamage()
@@ -64,12 +75,21 @@ public class GamePiece : MonoBehaviour
 
     public void TemporarilyPlacePiece(GridCell originCell)
     {
-        transform.position = originCell.transform.position;
         Origin = originCell.GridPosition;
-
         m_Orientation = Orientation.West;
 
-        FindNextAvailableRotation();
-        transform.rotation = Quaternion.Euler(0f, 90f * (int)m_Orientation, 0f);
+
+        if (FindNextAvailableRotation())
+        {
+            Debug.Log("Found Appropriate Position");
+
+            transform.position = originCell.transform.position;
+
+            transform.rotation = Quaternion.Euler(0f, 90f * (int)m_Orientation, 0f);
+        }
+        else
+        {
+            Debug.Log("No available room.");
+        }
     }
 }
