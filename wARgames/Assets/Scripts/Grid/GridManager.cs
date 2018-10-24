@@ -57,6 +57,60 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public bool IsValidLocation(Vector2Int origin, GamePiece piece)
+    {
+        bool isValid = false;
+
+        switch(piece.m_Orientation)
+        {
+            case GamePiece.Orientation.North:
+
+                for(int index = 0; index < piece.PieceLength; index++)
+                {
+                    if(GridCells[origin.x, origin.y + index].ContainsGamePiece)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+
+            case GamePiece.Orientation.East:
+
+                for (int index = 0; index < piece.PieceLength; index++)
+                {
+                    if (GridCells[origin.x - index, origin.y].ContainsGamePiece)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+
+            case GamePiece.Orientation.South:
+
+                for (int index = 0; index < piece.PieceLength; index++)
+                {
+                    if (GridCells[origin.x, origin.y - index].ContainsGamePiece)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+
+            case GamePiece.Orientation.West:
+
+                for (int index = 0; index < piece.PieceLength; index++)
+                {
+                    if (GridCells[origin.x + index, origin.y].ContainsGamePiece)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+        }
+
+        return isValid;
+    }
+
     #region
     private void PlaceNorth(Vector2Int origin, int length)
     { 

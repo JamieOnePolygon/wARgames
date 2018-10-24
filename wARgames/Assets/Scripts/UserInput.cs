@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class UserInput : MonoBehaviour
 {
-	
-	// Update is called once per frame
-	void Update ()
+    public GamePiece SelectedGameObject;
+
+    // Update is called once per frame
+    void Update()
     {
-		if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             //Getting any object under the mouse/touch position
             Ray screenRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -21,8 +22,30 @@ public class UserInput : MonoBehaviour
                 if (cell != null)
                 {
                     Debug.Log(cell.gameObject.name);
+
+                    if (SelectedGameObject != null)
+                    {
+                        SelectedGameObject.TemporarilyPlacePiece(cell);
+                    }
                 }
+
+                GamePiece gamePiece = hit.collider.transform.parent.GetComponent<GamePiece>();
+
+                if (gamePiece != null)
+                {
+                    SelectedGameObject = gamePiece;
+                }
+
             }
         }
-	}
+
+    }
+
+    public void RotateSelectedPiece()
+    {
+        if (SelectedGameObject != null)
+        {
+            SelectedGameObject.RotatePiece();
+        }
+    }
 }

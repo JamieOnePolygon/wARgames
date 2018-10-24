@@ -5,6 +5,7 @@ using UnityEngine;
 public class GamePiece : MonoBehaviour
 {
     public int PieceLength = 2;
+    public Vector2Int WhereToGo;
 
     public enum Orientation { North, East, South, West};
     public Orientation m_Orientation = Orientation.North;
@@ -24,23 +25,14 @@ public class GamePiece : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GridCell gridCell = GridManager.GetCell(new Vector2Int(9, 9));
+    
+    }
 
-            TemporarilyPlacePiece(gridCell);
-        }
+    public void RotatePiece()
+    {
+        FindNextAvailableRotation();
 
-        if (Origin != null && Input.GetKeyDown(KeyCode.R))
-        {
-            FindNextAvailableRotation();
-            transform.rotation = Quaternion.Euler(0f, 90f * (int)m_Orientation, 0f);
-        }
-
-        if(Origin != null && Input.GetKeyDown(KeyCode.Return))
-        {
-            GridManager.PlacePiece(Origin, this);
-        }
+        transform.rotation = Quaternion.Euler(0f, 90f * (int)m_Orientation, 0f);
     }
 
     private void FindNextAvailableRotation()
@@ -51,9 +43,9 @@ public class GamePiece : MonoBehaviour
         {
             m_Orientation++;
 
-            canRotate = GridManager.CanRotate(Origin, m_Orientation, PieceLength);
+            canRotate = (GridManager.CanRotate(Origin, m_Orientation, PieceLength) && GridManager.IsValidLocation(Origin, this));
 
-            if ((int)m_Orientation >= 3)
+            if ((int)m_Orientation >= 4)
             {
                 m_Orientation = 0;
             }
@@ -74,6 +66,8 @@ public class GamePiece : MonoBehaviour
     {
         transform.position = originCell.transform.position;
         Origin = originCell.GridPosition;
+
+        m_Orientation = Orientation.West;
 
         FindNextAvailableRotation();
         transform.rotation = Quaternion.Euler(0f, 90f * (int)m_Orientation, 0f);
