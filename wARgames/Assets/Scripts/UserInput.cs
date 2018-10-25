@@ -31,7 +31,7 @@ public class UserInput : MonoBehaviour
 
                 GamePiece gamePiece = hit.collider.transform.parent.GetComponent<GamePiece>();
 
-                if (gamePiece != null)
+                if (gamePiece != null && gamePiece.IsPlaced == false)
                 {
                     SelectedGameObject = gamePiece;
                 }
@@ -52,5 +52,6 @@ public class UserInput : MonoBehaviour
     public void PlaceSelectedPiece()
     {
         FindObjectOfType<GridManager>().PlacePiece(SelectedGameObject.Origin, SelectedGameObject);
+        SelectedGameObject = null;
     }
 }

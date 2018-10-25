@@ -15,8 +15,7 @@ public class GridManager : MonoBehaviour
     {
         GridCell theCell = GridCells[pos.x, pos.y];
 
-        if (theCell.Targeted == true) return false;
-        else return true;
+        return !theCell.Targeted;
     }
 
     public void PlacePiece(Vector2Int position, GamePiece gamePiece)
@@ -55,6 +54,8 @@ public class GridManager : MonoBehaviour
                 PlaceWest(position, gamePiece.PieceLength);
                 break;
         }
+
+        gamePiece.PlacePiece();
     }
 
     #region
@@ -114,8 +115,6 @@ public class GridManager : MonoBehaviour
                 // Checking to see if a piece will over hang.
                 if (origin.y + piece.PieceLength > GridCells.GetLength(0))
                 {
-                    Debug.Log("Piece too long to fit North");
-
                     return false;
                 }
 
@@ -124,8 +123,6 @@ public class GridManager : MonoBehaviour
                 {
                     if (GridCells[origin.x, origin.y + index].ContainsGamePiece)
                     {
-                        Debug.Log("Piece overlaps anorther");
-
                         return false;
                     }
                 }
@@ -139,9 +136,6 @@ public class GridManager : MonoBehaviour
                 // Checking to see if a piece will over hang.
                 if (origin.x - piece.PieceLength + 1 < 0)
                 {
-                    Debug.Log("Piece too long to fit East");
-
-
                     return false;
                 }
 
@@ -150,8 +144,6 @@ public class GridManager : MonoBehaviour
                 {
                     if (GridCells[origin.x - index, origin.y].ContainsGamePiece)
                     {
-                        Debug.Log("Piece overlaps anorther");
-
                         return false;
                     }
                 }
@@ -165,9 +157,6 @@ public class GridManager : MonoBehaviour
                 // Checking to see if a piece will over hang.
                 if (origin.y - piece.PieceLength + 1 < 0)
                 {
-                    Debug.Log("Piece too long to fit South");
-
-
                     return false;
                 }
 
@@ -176,8 +165,6 @@ public class GridManager : MonoBehaviour
                 {
                     if (GridCells[origin.x, origin.y - index].ContainsGamePiece)
                     {
-                        Debug.Log("Piece overlaps anorther");
-
                         return false;
                     }
                 }
@@ -191,8 +178,6 @@ public class GridManager : MonoBehaviour
                 // Checking to see if a piece will over hang.
                 if (origin.x + piece.PieceLength > GridCells.GetLength(1))
                 {
-                    Debug.Log("Piece too long to fit West");
-
                     return false;
                 }
 
@@ -201,8 +186,6 @@ public class GridManager : MonoBehaviour
                 {
                     if (GridCells[origin.x + index, origin.y].ContainsGamePiece)
                     {
-                        Debug.Log("Piece overlaps anorther");
-
                         return false;
                     }
                 }

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4091948428828700}
   - component: {fileID: 65133308048414772}
   - component: {fileID: 114214871278995354}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Grid Cell 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4794552061446236}
   - component: {fileID: 33698550122108174}
   - component: {fileID: 23305041946402700}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

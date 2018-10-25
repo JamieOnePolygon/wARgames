@@ -10,6 +10,7 @@ public class GamePiece : MonoBehaviour
     public Orientation m_Orientation = Orientation.North;
 
     public Vector2Int Origin { get; private set; }
+    public bool IsPlaced { get; private set; }
     private int remainingHitPoints;
 
     GridManager GridManager;
@@ -21,11 +22,6 @@ public class GamePiece : MonoBehaviour
 
         remainingHitPoints = PieceLength;	
 	}
-
-    private void Update()
-    {
-    
-    }
 
     public void RotatePiece()
     {
@@ -47,8 +43,6 @@ public class GamePiece : MonoBehaviour
             {
                 m_Orientation = Orientation.North;
             }
-
-            Debug.LogFormat("Attempting Orientation: {0}", m_Orientation.ToString());
 
             canPlace = GridManager.ValidationLocationRotation(Origin, this);
 
@@ -81,15 +75,14 @@ public class GamePiece : MonoBehaviour
 
         if (FindNextAvailableRotation())
         {
-            Debug.Log("Found Appropriate Position");
-
             transform.position = originCell.transform.position;
 
             transform.rotation = Quaternion.Euler(0f, 90f * (int)m_Orientation, 0f);
         }
-        else
-        {
-            Debug.Log("No available room.");
-        }
+    }
+
+    public void PlacePiece()
+    {
+        IsPlaced = true;
     }
 }
